@@ -18,6 +18,8 @@ jobs:
           repository: eclizator/skillup_php
           tags: latest
           tag_with_sha: true
+          dockerfile: ./Dockerfile
+          path: ./
       - name: restart backend
         uses: appleboy/ssh-action@master
         with:
