@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: build docker image with latest code
         uses: docker/build-push-action@v1
-          with:
-            registry: 176.36.164.228:5000
-            repository: eclizator/skillup_php
-            tags: latest
-            tag_with_sha: true
+        with:
+          registry: 176.36.164.228:5000
+          repository: eclizator/skillup_php
+          tags: latest
+          tag_with_sha: true
       - name: restart backend
         uses: appleboy/ssh-action@master
         with:
