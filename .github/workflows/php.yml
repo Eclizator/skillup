@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: download code
+        uses: actions/checkout@v2
+      - name: where am I
+        run: pwd && find Dockerfile -maxdepth 3 -ls
       - name: build docker image with latest code
         uses: docker/build-push-action@v1
         with:
