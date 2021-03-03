@@ -14,16 +14,9 @@ jobs:
       - 
         name: download code
         uses: actions/checkout@v2
-      - 
-        name: Login to My Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ secrets.REGISTRY_URL }}
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
       -
-        name: where am I
-        run: pwd && find ./ -maxdepth 3 -ls
+        name: Docker login
+        run: docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY_URL }}
       - 
         name: build docker image with latest code
         uses: docker/build-push-action@v1
