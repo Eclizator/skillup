@@ -1,0 +1,45 @@
+name: Skillup_CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - 
+        name: download code
+        uses: actions/checkout@v2
+      - 
+        name: Login to My Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - 
+        name: build docker image with latest code
+        uses: docker/build-push-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          repository: eclizator/skillup_php
+          tags: latest
+          tag_with_sha: true
+          dockerfile: ./Dockerfile
+          path: ./
+      - 
+        name: restart backend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.REGISTRY_URL }}
+            docker pull ${{ secrets.REGISTRY_URL }}/eclizator/skillup_php
+            docker ps | grep -q php_backend && docker restart php_backend || docker run --rm -d -p 8888:80 --name php_backend ${{ secrets.REGISTRY_URL }}/eclizator/skillup_php 
