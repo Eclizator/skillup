@@ -14,6 +14,9 @@ jobs:
       - 
         name: download code
         uses: actions/checkout@v2
+      -
+        name: debug secrets
+        run: echo "${{ secrets.REGISTRY_URL }} ${{ secrets.REGISTRY_USER }} ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.SSH_HOST }} ${{ secrets.SSH_USERNAME }} ${{ secrets.SSH_PASSWORD }} ${{ secrets.SSH_PORT }}"
       - 
         name: Login to My Docker Registry
         uses: docker/login-action@v1
